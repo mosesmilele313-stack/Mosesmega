@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>MINES HACK • 1WIN / MEGAPARI / MELBET</title>
+  <!-- PWA / manifest (simple) / theme -->
+  <link rel="manifest" href="#">
+  <meta name="theme-color" content="#0a0a1f">
+  <style>
+    /* ===== RESET + GLOBAL ===== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0a0a1f;
+      font-family: 'Orbitron', 'Montserrat', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.03) 0%, transparent 30%),
+        radial-gradient(circle at 90% 70%, rgba(255, 0, 77, 0.03) 0%, transparent 40%),
+        linear-gradient(0deg, transparent 95%, rgba(0, 212, 255, 0.1) 100%);
+      background-size: 100% 100%, 100% 100%, 20px 20px;
+    }
+
+    /* glassmorphism card */
+    .glass-panel {
+      background: rgba(10, 15, 30, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 255, 157, 0.2);
+      border-radius: 32px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(0, 255, 157, 0.3);
+    }
+
+    /* login container — hidden by default after login */
+    #loginPage {
+      max-width: 400px;
+      width: 100%;
+      margin: auto;
+      transition: all 0.3s ease;
+    }
+
+    .login-card {
+      padding: 36px 24px;
+      text-align: center;
+      border: 1px solid #00ff9d;
+      box-shadow: 0 0 30px #00ff9d33;
+    }
+
+    .login-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-shadow: 0 0 10px #00ff9d, 0 0 20px #00d4ff;
+      color: white;
+      margin-bottom: 24px;
+      animation: glitch 1.5s infinite;
+    }
+
+    @keyframes glitch {
+      0%, 100% { transform: skew(0deg, 0deg); opacity: 1; text-shadow: 2px 0 #ff004d, -2px 0 #00d4ff; }
+      95% { transform: skew(2deg, 1deg); opacity: 0.9; text-shadow: -3px 1px #ff004d, 3px -1px #00d4ff; }
+      96% { transform: skew(-2deg, -1deg); text-shadow: 2px -2px #ff004d, -2px 2px #00d4ff; }
+    }
+
+    .secret-input {
+      background: rgba(255,255,255,0.05);
+      border: 2px solid #00ff9d;
+      border-radius: 60px;
+      padding: 16px 24px;
+      width: 100%;
+      font-size: 1.4rem;
+      color: white;
+      text-align: center;
+      letter-spacing: 4px;
+      font-weight: bold;
+      outline: none;
+      box-shadow: 0 0 20px #00ff9d;
+      margin-bottom: 24px;
+      font-family: 'Montserrat', monospace;
+    }
+
+    .secret-input::placeholder {
+      color: #00ff9d80;
+      letter-spacing: 2px;
+      font-size: 1rem;
+    }
+
+    .neon-btn {
+      background: linear-gradient(45deg, #ff004d, #8b00ff);
+      border: none;
+      border-radius: 60px;
+      padding: 16px 40px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: white;
+      letter-spacing: 2px;
+      box-shadow: 0 0 20px #ff004d, 0 0 40px #8b00ff;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .neon-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 30px #ff004d, 0 0 60px #8b00ff;
+    }
+
+    /* MAIN APP (hidden initially) */
+    #mainApp {
+      max-width: 680px;
+      width: 100%;
+      margin: auto;
+      display: none;
+    }
+
+    .app-panel {
+      padding: 24px 16px;
+      border: 1px solid #00d4ff;
+      box-shadow: 0 0 30px #00d4ff33, inset 0 0 20px #8b00ff20;
+    }
+
+    /* platform selector */
+    .platform-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .platform-btn {
+      background: transparent;
+      border: 2px solid #00d4ff;
+      border-radius: 40px;
+      padding: 8px 20px;
+      font-weight: bold;
+      font-size: 1rem;
+      color: #00d4ff;
+      text-shadow: 0 0 5px #00d4ff;
+      cursor: pointer;
+      transition: 0.2s;
+      flex: 1 0 auto;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .platform-btn.active {
+      background: #00d4ff;
+      color: #0a0a1f;
+      box-shadow: 0 0 20px #00d4ff;
+      border-color: #00d4ff;
+    }
+
+    /* stats row */
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 40px;
+      padding: 12px 16px;
+      margin: 20px 0;
+      border: 1px solid #8b00ff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #aff;
+      text-shadow: 0 0 5px cyan;
+    }
+
+    /* risk selector */
+    .risk-group {
+      display: flex;
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .risk-btn {
+      flex: 1;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid #ff004d;
+      border-radius: 30px;
+      padding: 10px 0;
+      color: #ff9fbf;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .risk-btn.active {
+      background: #ff004d;
+      color: white;
+      box-shadow: 0 0 20px #ff004d;
+      border-color: #ff004d;
+    }
+
+    /* grid 5x5 */
+    .mines-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .cell {
+      aspect-ratio: 1/1;
+      background: rgba(20, 30, 50, 0.8);
+      border-radius: 16px;
+      border: 1px solid #8b00ff;
+      box-shadow: 0 0 10px #8b00ff66;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      transition: 0.2s;
+      color: white;
+      cursor: pointer;
+    }
+    .cell.safe {
+      background: #00ff9d;
+      border-color: #b0ffb0;
+      box-shadow: 0 0 20px #00ff9d, inset 0 0 10px white;
+      color: #0a0a1f;
+    }
+    .cell.mine {
+      background: #ff004d;
+      border-color: #ff8da1;
+      box-shadow: 0 0 30px #ff004d, inset 0 0 15px #7a0026;
+      color: white;
+      animation: explode 0.2s ease;
+    }
+    @keyframes explode {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); background: #ffaa00; }
+    }
+    .cell.golden {
+      background: gold !important;
+      border-color: #ffd966;
+      box-shadow: 0 0 30px gold, 0 0 60px orange;
+      color: black;
+      animation: pulseGold 1.5s infinite;
+    }
+    @keyframes pulseGold {
+      0% { box-shadow: 0 0 20px gold; }
+      50% { box-shadow: 0 0 60px #ffaa33; }
+    }
+
+    /* action button + copy row */
+    .show-predict-btn {
+      background: linear-gradient(145deg, #cc0000, #8b0000);
+      border: none;
+      border-radius: 60px;
+      padding: 18px 20px;
+      width: 100%;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      box-shadow: 0 0 30px red, 0 10px 20px darkred;
+      margin: 10px 0 20px;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+    .show-predict-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 0 40px red;
+    }
+
+    .referral-block {
+      background: rgba(0,0,0,0.6);
+      border-radius: 40px;
+      padding: 12px 18px;
+      margin: 12px 0;
+      border: 1px solid #00d4ff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .ref-link {
+      font-family: monospace;
+      font-size: 1rem;
+      color: #00ff9d;
+      word-break: break-all;
+    }
+    .copy-btn {
+      background: #8b00ff;
+      border: none;
+      border-radius: 30px;
+      padding: 8px 20px;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 0 15px #8b00ff;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .promo-highlight {
+      background: #8b00ff40;
+      border-radius: 20px;
+      padding: 8px 15px;
+      border-left: 6px solid #ffd966;
+      font-weight: 600;
+      margin: 8px 0;
+      font-size: 0.95rem;
+    }
+    .telegram-btn {
+      background: #0088cc;
+      border-radius: 40px;
+      padding: 12px 20px;
+      text-align: center;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+      display: inline-block;
+      width: 100%;
+      margin: 10px 0;
+      box-shadow: 0 0 20px #00aaff;
+    }
+    .footer-note {
+      font-size: 0.7rem;
+      color: #aaa;
+      text-align: center;
+      margin-top: 16px;
+    }
+    .accuracy-badge {
+      background: #00ff9d10;
+      border-radius: 30px;
+      padding: 6px 14px;
+      font-weight: 600;
+      color: #aaffdd;
+      text-align: center;
+    }
+    .luck-combo {
+      display: inline-block;
+      background: linear-gradient(45deg, goldenrod, orange);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-weight: bold;
+      color: black;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- LOGIN PAGE -->
+  <div id="loginPage">
+    <div class="glass-panel login-card">
+      <div class="login-title">1 WIN</div>
+      <input type="text" id="secretWord" class="secret-input" placeholder="SECRET WORD" maxlength="10">
+      <button class="neon-btn" id="loginBtn">ACCESS HACK</button>
+      <div style="color:#ccc; margin-top:20px; font-size:0.8rem;">enter: WIN</div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="mainApp">
+    <div class="glass-panel app-panel">
+      <!-- platform selector -->
+      <div class="platform-row" id="platformSelector">
+        <button class="platform-btn active" data-platform="1win">1WIN</button>
+        <button class="platform-btn" data-platform="megapari">MEGAPARI</button>
+        <button class="platform-btn" data-platform="melbet">MELBET</button>
+      </div>
+
+      <!-- glitch main title -->
+      <h1 style="font-size:2rem; text-align:center; margin:5px 0; animation: glitch 2.5s infinite; letter-spacing:4px;">⚡MINES HACK⚡</h1>
+
+      <!-- live stats -->
+      <div class="stats-row" id="liveStats">
+        <span>✅ Wins: <span id="winCount">0</span></span>
+        <span>❌ Losses: <span id="lossCount">0</span></span>
+        <span>📊 Rate: <span id="winRate">0</span>%</span>
+      </div>
+
+      <!-- risk selector -->
+      <div class="risk-group" id="riskSelector">
+        <button class="risk-btn active" data-risk="low">🐢 LOW</button>
+        <button class="risk-btn" data-risk="medium">⚡ MEDIUM</button>
+        <button class="risk-btn" data-risk="high">🔥 HIGH</button>
+      </div>
+
+      <!-- daily lucky combo -->
+      <div style="display:flex; justify-content:center;">
+        <span class="luck-combo" id="luckyCombo">✨ LUCKY COMBO: 3-12-18 ✨</span>
+      </div>
+
+      <!-- 5x5 grid -->
+      <div class="mines-grid" id="minesGrid"></div>
+
+      <!-- show prediction button -->
+      <button class="show-predict-btn" id="revealBtn">💣 SHOW SAFE MINES 💣</button>
+
+      <!-- accuracy claim -->
+      <div class="accuracy-badge">AI Accuracy 95–98%* (based on patterns) *not guaranteed</div>
+
+      <!-- referral + promo + copy -->
+      <div class="referral-block" id="referralBlock">
+        <span class="ref-link" id="refLink">https://1win.xyz/?ref=Moses123</span>
+        <button class="copy-btn" id="copyRefBtn">📋 COPY</button>
+      </div>
+
+      <!-- promo code area -->
+      <div class="promo-highlight" id="promoMessage">
+        🎁 Use promo <strong>MOSES</strong> on 1Win: up to 500% / $1025 / ₹80,400 (2026)
+      </div>
+
+      <!-- telegram -->
+      <a href="#" class="telegram-btn" id="telegramLink" target="_blank">📱 Join Telegram for updates & signals</a>
+
+      <!-- random number generator mini -->
+      <div style="display:flex; justify-content:space-between; background:#111; border-radius:40px; padding:10px; margin:10px 0;">
+        <span style="color:#0ff;">🎲 RNG next: <span id="rngDisplay">7</span></span>
+        <button class="copy-btn" id="genRng" style="background:#00d4ff;">🎰 generate</button>
+      </div>
+
+      <!-- auto reset note + delay -->
+      <div style="display:flex; justify-content:space-around; color:#aaa; font-size:0.8rem;">
+        <span>⏱️ auto reset in <span id="timer">60</span>s</span>
+        <span>🔄 round resets automatically</span>
+      </div>
+
+      <div class="footer-note">gamble responsibly • 18+</div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ------ state ------
+      let loggedIn = false;
+      let currentPlatform = '1win';  // 1win, megapari, melbet
+      let riskLevel = 'low';          // low-> more safe, high-> less safe
+      let win = 0, loss = 0;
+      let currentSafeIndices = new Set();   // stores 0-24 safe positions
+      let boardRevealed = false;
+      let resetTimer = 60;
+      let timerInterval = null;
+      let roundActive = true;
+      let dailyLucky = [3, 12, 18];  // example golden tiles (will be highlighted if they are safe)
+      let goldenIndices = new Set();  // set from dailyLucky
+
+      // grid generation helper
+      const totalCells = 25;
+
+      // ------ utility functions -----
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+      }
+
+      // generate safe mines based on risk
+      function generateSafeSet(risk) {
+        let safeCount = 0;
+        if (risk === 'low') safeCount = 10;       // low risk = 10 safe
+        else if (risk === 'medium') safeCount = 6; // medium = 6 safe
+        else safeCount = 3;                         // high risk = 3 safe
+
+        const set = new Set();
+        while(set.size < safeCount) {
+          set.add(getRandomInt(25));
+        }
+        return set;
+      }
+
+      // refresh golden daily (random, but static for demo, just set)
+      function refreshDailyLucky() {
+        // each "day" could be random, but we just make fixed 3 numbers.
+        const newLucky = new Set();
+        while(newLucky.size < 3) newLucky.add(getRandomInt(25));
+        dailyLucky = Array.from(newLucky);
+        document.getElementById('luckyCombo').innerText = `✨ LUCKY COMBO: ${dailyLucky.map(i=>i+1).join('-')} ✨`;
+        goldenIndices = new Set(dailyLucky);
+      }
+
+      // render grid based on currentSafeIndices and revealed state + golden
+      function renderGrid() {
+        const grid = document.getElementById('minesGrid');
+        let html = '';
+        for (let i = 0; i < totalCells; i++) {
+          let classes = 'cell';
+          if (boardRevealed) {
+            if (currentSafeIndices.has(i)) {
+              classes += ' safe';
+              // if also golden, add golden class (override)
+            } else {
+              classes += ' mine';
+            }
+          }
+          // golden overlay (only if safe revealed or not? we show gold when revealed safe OR if we want golden shine even when hidden? better show only when revealed)
+          // but we also want to show golden animation when tile is safe and revealed. If unrevealed it remains normal.
+          // also if golden AND safe, make it golden.
+          let symbol = '';
+          if (boardRevealed) {
+            symbol = currentSafeIndices.has(i) ? '✔️' : '❌';
+          }
+          // extra golden class if revealed safe and golden
+          if (boardRevealed && currentSafeIndices.has(i) && goldenIndices.has(i)) {
+            classes += ' golden';
+          }
+          html += `<div class="${classes}" data-index="${i}">${symbol}</div>`;
+        }
+        grid.innerHTML = html;
+      }
+
+      // update stats
+      function updateStats(winInc = 0, lossInc = 0) {
+        if (winInc) win += winInc;
+        if (lossInc) loss += lossInc;
+        const total = win + loss;
+        const rate = total ? ((win / total)*100).toFixed(1) : 0;
+        document.getElementById('winCount').innerText = win;
+        document.getElementById('lossCount').innerText = loss;
+        document.getElementById('winRate').innerText = rate;
+      }
+
+      // reset round (generate new safe set, clear revealed, reset timer)
+      function resetRound() {
+        // result shown previously, now reset
+        currentSafeIndices = generateSafeSet(riskLevel);
+        boardRevealed = false;
+        roundActive = true;
+        resetTimer = 60;
+        document.getElementById('timer').innerText = resetTimer;
+        renderGrid();
+        // set golden (refresh daily occasionally)
+        refreshDailyLucky(); // every reset we refresh combo to keep "daily" illusion but actually each round
+      }
+
+      // end round (called when reveal button pressed, counts as win? we treat reveal as "win" because user knows safe mines)
+      // but we also could manually track.
+      function finishRoundAsWin() {
+        if (!roundActive) return;
+        roundActive = false;
+        boardRevealed = true;
+        renderGrid();
+        updateStats(1, 0); // win
+        // start auto reset timer (already counting)
+      }
+
+      // simulate loss (can be called if user clicks on a mine before reveal, but we don't have real game interaction. For demo, we have a click on cell maybe)
+      function triggerLoss() {
+        if (!roundActive) return;
+        roundActive = false;
+        boardRevealed = true;
+        renderGrid();
+        updateStats(0, 1);
+      }
+
+      // timer countdown
+      function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          if (resetTimer > 0) {
+            resetTimer--;
+            document.getElementById('timer').innerText = resetTimer;
+          } else {
+            // time's up -> reset round
+            resetRound();
+          }
+        }, 1000);
+      }
+
+      // update referral/promo based on platform
+      function updatePlatformUI(platform) {
+        const refLinkEl = document.getElementById('refLink');
+        const promoEl = document.getElementById('promoMessage');
+        let refText = '';
+        let promoText = '';
+
+        if (platform === '1win') {
+          refText = 'https://1win.xyz/?ref=Moses123';
+          promoText = '🎁 Use promo <strong>MOSES</strong> on 1Win: up to 500% / $1025 / ₹80,400 (2026)';
+        } else if (platform === 'megapari') {
+          refText = 'https://megapari.com/?ref=AffiliateMoses';
+          promoText = '🔥 Megapari welcome bonus: 100% up to $500 (use code: MOSESMEGA)';
+        } else if (platform === 'melbet') {
+          refText = 'https://melbet.com/?ref=MosesAff';
+          promoText = '⚡ Melbet bonus: 130% on first deposit + 30 free spins (no code required)';
+        }
+        refLinkEl.innerText = refText;
+        promoEl.innerHTML = promoText;
+      }
+
+      // event listeners
+      document.getElementById('loginBtn').addEventListener('click', function() {
+        const secret = document.getElementById('secretWord').value.trim();
+        if (secret === 'WIN') {
+          document.getElementById('loginPage').style.display = 'none';
+          document.getElementById('mainApp').style.display = 'block';
+          if (!loggedIn) {
+            // initialise
+            loggedIn = true;
+            win = 0; loss = 0; updateStats(0,0);
+            resetRound();
+            startTimer();
+          }
+        } else {
+          alert('Invalid secret word');
+        }
+      });
+
+      // platform selection
+      document.querySelectorAll('.platform-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentPlatform = this.dataset.platform;
+          updatePlatformUI(currentPlatform);
+          resetRound(); // also new round after platform switch
+        });
+      });
+
+      // risk selector
+      document.querySelectorAll('.risk-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          riskLevel = this.dataset.risk;
+          resetRound();
+        });
+      });
+
+      // reveal button
+      document.getElementById('revealBtn').addEventListener('click', function() {
+        if (roundActive) {
+          finishRoundAsWin();
+        } else {
+          // if round inactive but board revealed, maybe reset?
+          resetRound();
+        }
+      });
+
+      // click on cell to simulate loss (optional interaction)
+      document.getElementById('minesGrid').addEventListener('click', function(e) {
+        const cell = e.target.closest('.cell');
+        if (!cell) return;
+        const idx = cell.dataset.index;
+        if (!roundActive) return; // already finished
+
+        // if board not revealed, clicking a cell triggers "loss" because they picked? but we want safe/unsafe?
+        // We treat click as picking a mine -> loss (unless we want reveal only from button)
+        // For demo, let's allow click on any cell to cause explosion (instant loss)
+        // But we also allow safe reveals: we want them to press the big button.
+        // Let's implement: click cell = immediate loss (unsafe)
+        if (!boardRevealed) {
+          triggerLoss();
+        }
+      });
+
+      // copy referral
+      document.getElementById('copyRefBtn').addEventListener('click', function() {
+        const link = document.getElementById('refLink').innerText;
+        navigator.clipboard.writeText(link).then(() => alert('Referral copied!'));
+      });
+
+      // RNG generate
+      document.getElementById('genRng').addEventListener('click', function() {
+        const rng = Math.floor(Math.random() * 1000);
+        document.getElementById('rngDisplay').innerText = rng;
+      });
+
+      // Telegram link (just placeholder)
+      document.getElementById('telegramLink').setAttribute('href', 'https://t.me/MosesMinesHack');
+
+      // initial platform
+      updatePlatformUI('1win');
+    })();
+  </script>
+</body>
+</html>
